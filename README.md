@@ -1,6 +1,6 @@
 # edcc
 
-A new Flutter project.
+A new Flutter project. This is a mobile app for collaborators in the Event Driven Community Collaboration
 
 ## Getting Started
 
