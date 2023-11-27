@@ -172,13 +172,227 @@ class HomePage extends StatelessWidget {
                         TextStyle(fontSize: 30, fontWeight: FontWeight.bold))),
               ),
              ListView(
-               shrinkWrap: true, children: const [
-                  ListTile(shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 2)), title: Text("Barbecue Party"), subtitle: Text("Friday, 2:00 - 4:00 pm"), trailing: Text("View Details")),
-                  ListTile(shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 2)), title: Text("Soccer game"), subtitle: Text("Friday, 2:00 - 4:00 pm"), trailing: Text("View Details")),
-                  ListTile(shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 2)), title: Text("Talent Show"), subtitle: Text("Friday, 2:00 - 4:00 pm"), trailing: Text("View Details"))
+               shrinkWrap: true, children: [
+                  ListTile(shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 2)), title: Text("Barbecue Party"), subtitle: Text("Friday, 2:00 - 4:00 pm"),
+                      trailing: Text("View Details"),
+                      onTap: () {
+                          Navigator.push(
+                          context, MaterialPageRoute(builder: (_) => ViewDetailsBBQ()));}),
+                  ListTile(shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 2)), title: Text("Soccer game"), subtitle: Text("Saturday, 12:00 - 3:00 pm"),
+                      trailing: Text("View Details"),
+                      onTap: () {
+                          Navigator.push(
+                          context, MaterialPageRoute(builder: (_) => ViewDetailsSoccer()));}),
+                  ListTile(shape: RoundedRectangleBorder(side: BorderSide(color: Colors.black, width: 2)), title: Text("Talent Show"), subtitle: Text("Monday, 3:00 - 5:00 pm"),
+                      trailing: Text("View Details"),
+                      onTap: () {
+                        Navigator.push(
+                            context, MaterialPageRoute(builder: (_) => ViewDetailsTalentShow()));}),
                 ],
               )
         ]
+            )
+        )
+    );
+
+  }
+}
+
+//Details page for BBQ Party
+class ViewDetailsBBQ extends StatelessWidget {
+  const ViewDetailsBBQ({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.lightBlue[50],
+        appBar: AppBar(
+          title: const Text('EDCC'),
+          backgroundColor: Colors.blue,
+        ),
+        body: SingleChildScrollView(
+            child: Column(children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.only(left: 15.0, top: 25.0),
+                child: Center(
+                    child: Text('Barbeque Party',
+                        style:
+                        TextStyle(fontSize: 40, fontWeight: FontWeight.bold))),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 15.0, top: 25.0, bottom: 15.0),
+                child: Center(
+                    child: Text("Event Details: Get ready for an unforgettable barbecue experience! Join us as we fire up the grill for a variety of succulent meats, enjoy live entertainment, and savor the vibrant atmosphere with friends and family. It's an afternoon of delicious flavors, laughter, and delightful moments that you won't want to miss!",
+                        style:
+                        TextStyle(fontSize: 25),
+                        softWrap: true))
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  child: Center(
+                      child: Text("Date: Friday, 2:00 - 4:00 pm",
+                          style:
+                          TextStyle(fontSize: 25)))
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 25.0),
+                  child: Center(
+                      child: Text("Location: Eldorado Park",
+                          style:
+                          TextStyle(fontSize: 25)))
+              ),
+              Container(
+                height: 50,
+                width: 300,
+                decoration: BoxDecoration(
+                    color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => OpenMap()));
+                  },
+                  child: const Text(
+                    'View Location on Map',
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  ),
+                ),
+              ),
+            ]
+            )
+        )
+    );
+
+  }
+}
+
+//Details page for Soccer Game
+class ViewDetailsSoccer extends StatelessWidget {
+  const ViewDetailsSoccer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.lightBlue[50],
+        appBar: AppBar(
+          title: const Text('EDCC'),
+          backgroundColor: Colors.blue,
+        ),
+        body: SingleChildScrollView(
+            child: Column(children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.only(left: 15.0, top: 25.0),
+                child: Center(
+                    child: Text('Soccer Game',
+                        style:
+                        TextStyle(fontSize: 40, fontWeight: FontWeight.bold))),
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 25.0, bottom: 15.0),
+                  child: Center(
+                      child: Text("Event Details: Embark on a soccer adventure at the Sheridan Better Bruins Gym – an open invitation for everyone to join in the excitement! Whether you're a seasoned player or just eager to kick the ball around, come and be part of the action.",
+                          style:
+                          TextStyle(fontSize: 25),
+                          softWrap: true))
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  child: Center(
+                      child: Text("Date: Saturday, 12:00 - 3:00 pm",
+                          style:
+                          TextStyle(fontSize: 25)))
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 25.0),
+                  child: Center(
+                      child: Text("Location: Sheridan Bruins Gym",
+                          style:
+                          TextStyle(fontSize: 25)))
+              ),
+              Container(
+                height: 50,
+                width: 300,
+                decoration: BoxDecoration(
+                    color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => OpenMap()));
+                  },
+                  child: const Text(
+                    'View Location on Map',
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  ),
+                ),
+              ),
+            ]
+            )
+        )
+    );
+
+  }
+}
+
+
+//Details page for Talent Show
+class ViewDetailsTalentShow extends StatelessWidget {
+  const ViewDetailsTalentShow({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.lightBlue[50],
+        appBar: AppBar(
+          title: const Text('EDCC'),
+          backgroundColor: Colors.blue,
+        ),
+        body: SingleChildScrollView(
+            child: Column(children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.only(left: 15.0, top: 25.0),
+                child: Center(
+                    child: Text('Talent Show',
+                        style:
+                        TextStyle(fontSize: 40, fontWeight: FontWeight.bold))),
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(left: 15.0, top: 25.0, bottom: 15.0),
+                  child: Center(
+                      child: Text("Event Details: Discover a stage for all talents at the Talent Show – an event where everyone is welcome to shine! Whether you're a seasoned performer or stepping into the spotlight for the first time, come and share your talents in a celebration of creativity and community.",
+                          style:
+                          TextStyle(fontSize: 25),
+                          softWrap: true))
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  child: Center(
+                      child: Text("Date: Monday, 3:00 - 5:00 pm",
+                          style:
+                          TextStyle(fontSize: 25)))
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 25.0),
+                  child: Center(
+                      child: Text("Location: Algoma University",
+                          style:
+                          TextStyle(fontSize: 25)))
+              ),
+              Container(
+                height: 50,
+                width: 300,
+                decoration: BoxDecoration(
+                    color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => OpenMap()));
+                  },
+                  child: const Text(
+                    'View Location on Map',
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  ),
+                ),
+              ),
+            ]
             )
         )
     );
