@@ -31,7 +31,7 @@
             android:value="2" />
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="Add token here(got rid of since github is public)"/>
+            android:value="AIzaSyDl5Gi7HeL8HnvX2TjB2ZRNFu4pHu4To_w"/>
 
     </application>
 </manifest>
