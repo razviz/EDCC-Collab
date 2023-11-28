@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "695294629356",
+    "project_id": "edcc-85230",
+    "storage_bucket": "edcc-85230.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695294629356:android:34717aec7f536ca9909cc9",
+        "android_client_info": {
+          "package_name": "com.example.edcc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwGTyQqyideG5G361dY5L-OogkFwfGNKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
