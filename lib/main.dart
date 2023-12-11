@@ -4,8 +4,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-// ...
-
+//for web scraping
+import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' as htmlParser;
 
 
 Future<void> main() async{
@@ -650,6 +651,49 @@ class CreateEvents extends StatelessWidget {
   }
 }
 
+
+//scrape the data
+class Scraping extends State<LoginDemo> {
+  String scrapedData = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              final url = 'http://quotes.toscrape.com'; // Updated URL
+              final response = await http.get(Uri.parse(url));
+
+              if (response.statusCode == 200) {
+                // If the server returns a 200 OK response,
+                // parse the HTML content
+                final document = htmlParser.parse(response.body);
+                // Extract the data you need from the parsed HTML
+                final firstQuoteElement = document.querySelector('.text');
+                final firstQuote = firstQuoteElement?.text ?? 'Quote not found';
+                setState(() { //had to add state
+                  scrapedData = firstQuote;
+                });
+              } else {
+                // If the server did not return a 200 OK response,
+                // throw an exception.
+                throw Exception('Failed to load data');
+              }
+            },
+            child: Text('Get Quote'),
+          ),
+          SizedBox(height: 20),
+          Text('Scraped Quote: $scrapedData'),
+        ],
+      ),
+    );
+  }
+
+}
+
 //Create a map centered on Sydney, Australia.
 class OpenMap extends StatelessWidget {
   late GoogleMapController mapController;
@@ -688,4 +732,6 @@ class OpenMap extends StatelessWidget {
       ),
     );
   }
+
+
 }

@@ -225,13 +225,21 @@ packages:
     source: hosted
     version: "0.5.4+2"
   html:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: html
       sha256: "3a7812d5bcd2894edf53dfaf8cd640876cf6cef50a8f238745c8b8120ea74d3a"
       url: "https://pub.dev"
     source: hosted
     version: "0.15.4"
+  http:
+    dependency: "direct dev"
+    description:
+      name: http
+      sha256: d4872660c46d929f6b8a9ef4e7a7eff7e49bbf0c4ec3f385ee32df5119175139
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   http_parser:
     dependency: transitive
     description:
