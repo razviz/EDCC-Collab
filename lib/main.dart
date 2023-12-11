@@ -721,10 +721,10 @@ class OpenMap extends StatelessWidget {
             markers: {
               const Marker(
                 markerId: MarkerId('Sydney'),
-                position: LatLng(-33.86, 151.20),
+                position: LatLng(-33.86, 151.2),
                 infoWindow: InfoWindow(
                   title: "Sydney",
-                  snippet: "Capital of New South Wales",
+                  snippet: "Event location",
                 ),
               )
             },
