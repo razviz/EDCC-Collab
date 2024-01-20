@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
 
 //for web scraping
 import 'package:http/http.dart' as http;
@@ -541,6 +543,7 @@ class CreateEvents extends StatelessWidget {
   TextEditingController eventDate = TextEditingController();
   TextEditingController eventTime = TextEditingController();
   TextEditingController eventLocation = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
