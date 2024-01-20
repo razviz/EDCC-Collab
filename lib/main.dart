@@ -450,7 +450,7 @@ class Register extends StatelessWidget {
             ),
 
             Padding(
-              padding: const EdgeInsets.only(top: 40.0),
+              padding: const EdgeInsets.only(top: 20.0),
               child: Center(
                 child: Container(
                     width: 200,
@@ -463,7 +463,7 @@ class Register extends StatelessWidget {
             ),
             const Padding(
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: TextField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -474,7 +474,7 @@ class Register extends StatelessWidget {
             ),
             const Padding(
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: TextField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -485,7 +485,7 @@ class Register extends StatelessWidget {
             ),
             const Padding(
               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: TextField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -494,8 +494,8 @@ class Register extends StatelessWidget {
               ),
             ),
             const Padding(
-              padding:
-                  EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 40),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  //EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 40),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                 decoration: InputDecoration(
@@ -503,6 +503,18 @@ class Register extends StatelessWidget {
                     labelText: 'Phone number',
                     hintText:
                         'Enter a valid phone number such as 905-490-0456'),
+              ),
+            ),
+            const Padding(
+              padding:
+              EdgeInsets.only(left: 15.0, right: 15.0, top: 10, bottom: 30),
+              //padding: EdgeInsets.symmetric(horizontal: 15),
+              child: TextField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'College/University',
+                    hintText:
+                    'Enter the college or university you attend'),
               ),
             ),
             Container(
