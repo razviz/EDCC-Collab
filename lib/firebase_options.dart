@@ -84,16 +84,16 @@ class DefaultFirebaseOptions {
 
   void saveData() async {
 
-    String name = eventName.text;
-    String details = eventDescribe.text;
-    String date = eventDate.text;
-    String location = eventLocation.text;
+    //String name = eventName.text;
+    //String details = eventDescribe.text;
+    //String date = eventDate.text;
+    //String location = eventLocation.text;
 
     await FirebaseFirestore.instance.collection('Events').add( {
-      'name': name,
-      'details': details,
-      'date': date,
-      'location': location
+      //'name': name,
+      //'details': details,
+      //'date': date,
+      //'location': location
 
     });
   }
