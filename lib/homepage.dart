@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'CreateEvents.dart';
-import 'login.dart';
+import 'EventDetailsScreen.dart'; // Import the EventInfoScreen
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> _events = [];
+  List<DocumentSnapshot> _events = []; // Use DocumentSnapshot to store the event
 
   @override
   void initState() {
@@ -22,19 +22,10 @@ class _HomePageState extends State<HomePage> {
   // Fetch events from Firestore and update the list
   Future<void> _fetchEventsFromFirestore() async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('Events').get();
-      List<Map<String, dynamic>> events = snapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return {
-          'title': data['name'] ?? 'No Title',
-          'subtitle': data['date'] ?? 'No Date',
-          'details': data['description'] ?? 'No Details Available',
-          'location': data['location'] ?? 'No Location',
-        };
-      }).toList();
-
+      QuerySnapshot snapshot =
+      await FirebaseFirestore.instance.collection('Events').get();
       setState(() {
-        _events = events;
+        _events = snapshot.docs; // Store the list of DocumentSnapshots
       });
     } catch (e) {
       print('Error fetching events from Firestore: $e');
@@ -81,25 +72,31 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             _events.isEmpty
-                ? const Center(child: CircularProgressIndicator()) // Show a loading spinner while fetching data
+                ? const Center(
+              child: CircularProgressIndicator(),
+            ) // Show a loading spinner while fetching data
                 : ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(), // Disable scrolling within the ListView
+              physics: NeverScrollableScrollPhysics(),
               itemCount: _events.length,
               itemBuilder: (context, index) {
                 final event = _events[index];
+                final data = event.data() as Map<String, dynamic>;
                 return ListTile(
                   shape: RoundedRectangleBorder(
                     side: BorderSide(color: Colors.black, width: 2),
                   ),
-                  title: Text(event['title'] ?? 'Unknown Event'),
-                  subtitle: Text(event['subtitle'] ?? 'No Date Available'),
+                  title: Text(data['Name'] ?? 'Unknown Event'),
+                  subtitle: Text(data['Time']?.toDate().toString() ??
+                      'No Date Available'),
                   trailing: const Text("View Details"),
                   onTap: () {
-                    // Navigate to details screen or login if needed
+                    // Navigate to EventDetailsScreen with the selected event's data
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => LoginDemo()), // Or another details screen
+                      MaterialPageRoute(
+                        builder: (_) => EventDetailsScreen(event: data),
+                      ),
                     );
                   },
                 );
