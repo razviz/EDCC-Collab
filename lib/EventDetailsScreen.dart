@@ -4,8 +4,30 @@ import 'OpenMap.dart'; // Import the OpenMap class
 
 class EventDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> event;
+  final String eventId; // Add eventId to delete the event
 
-  EventDetailsScreen({required this.event});
+  EventDetailsScreen({required this.event, required this.eventId});
+
+  // Function to delete the event from Firestore
+  Future<void> _deleteEvent(BuildContext context) async {
+    try {
+      // Delete the event from Firestore using the eventId
+      await FirebaseFirestore.instance.collection('Events').doc(eventId).delete();
+
+      // Show confirmation message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Event deleted successfully')),
+      );
+
+      // Navigate back after deletion
+      Navigator.pop(context);
+    } catch (e) {
+      // Show error message if something goes wrong
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete event: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,37 +103,27 @@ class EventDetailsScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20), // Spacer for better layout
+            // Button to delete event
+            Container(
+              height: 50,
+              width: 300,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  _deleteEvent(context); // Call the delete function
+                },
+                child: const Text(
+                  'Delete Event',
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
-  }
-}
-
-// Function to fetch event data from Firestore and navigate to EventDetailsScreen
-Future<void> fetchEventData(String eventId, BuildContext context) async {
-  try {
-    // Fetch the event data from Firestore
-    DocumentSnapshot eventSnapshot = await FirebaseFirestore.instance
-        .collection('events') // Ensure this matches the Firestore collection name
-        .doc(eventId)
-        .get();
-
-    if (eventSnapshot.exists) {
-      // Retrieve the entire document data
-      Map<String, dynamic> eventData = eventSnapshot.data() as Map<String, dynamic>;
-
-      // Now, navigate to the EventDetailsScreen
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => EventDetailsScreen(event: eventData),
-        ),
-      );
-    } else {
-      print('Event not found');
-    }
-  } catch (e) {
-    print('Error fetching event data: $e');
   }
 }

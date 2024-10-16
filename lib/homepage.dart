@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'CreateEvents.dart';
-import 'EventDetailsScreen.dart'; // Import the EventInfoScreen
+import 'EventDetailsScreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<DocumentSnapshot> _events = []; // Use DocumentSnapshot to store the event
+  List<DocumentSnapshot> _events = []; // Use DocumentSnapshot to store the events
 
   @override
   void initState() {
@@ -22,8 +22,7 @@ class _HomePageState extends State<HomePage> {
   // Fetch events from Firestore and update the list
   Future<void> _fetchEventsFromFirestore() async {
     try {
-      QuerySnapshot snapshot =
-      await FirebaseFirestore.instance.collection('Events').get();
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('Events').get();
       setState(() {
         _events = snapshot.docs; // Store the list of DocumentSnapshots
       });
@@ -82,20 +81,21 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 final event = _events[index];
                 final data = event.data() as Map<String, dynamic>;
+                final eventId = event.id; // Get the event ID
+
                 return ListTile(
                   shape: RoundedRectangleBorder(
                     side: BorderSide(color: Colors.black, width: 2),
                   ),
                   title: Text(data['Name'] ?? 'Unknown Event'),
-                  subtitle: Text(data['Time']?.toDate().toString() ??
-                      'No Date Available'),
+                  subtitle: Text(data['Time']?.toDate().toString() ?? 'No Date Available'),
                   trailing: const Text("View Details"),
                   onTap: () {
-                    // Navigate to EventDetailsScreen with the selected event's data
+                    // Navigate to EventDetailsScreen with the selected event's data and ID
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => EventDetailsScreen(event: data),
+                        builder: (_) => EventDetailsScreen(event: data, eventId: eventId),
                       ),
                     );
                   },
