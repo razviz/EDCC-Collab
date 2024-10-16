@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.only(top: 25.0, bottom: 25.0),
               child: Center(
                 child: Text(
-                  'My Upcoming Events',
+                  'Upcoming Events',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ),
