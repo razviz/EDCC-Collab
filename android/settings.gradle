@@ -29,5 +29,5 @@ plugins {
     id "com.google.gms.google-services" version "4.3.15" apply false
     // END: FlutterFire Configuration
 }
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
 include ":app"
