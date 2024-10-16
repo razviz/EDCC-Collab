@@ -19,10 +19,6 @@ import 'package:cloud_firestore/cloud_firestore.dart'
 /// );
 /// ```
 
-
-
-
-
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -34,15 +30,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -61,6 +51,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '695294629356',
     projectId: 'edcc-85230',
     authDomain: 'edcc-85230.firebaseapp.com',
+    databaseURL: 'https://edcc-85230-default-rtdb.firebaseio.com',
     storageBucket: 'edcc-85230.appspot.com',
     measurementId: 'G-W212VKFKPM',
   );
@@ -70,6 +61,7 @@ class DefaultFirebaseOptions {
     appId: '1:695294629356:android:34717aec7f536ca9909cc9',
     messagingSenderId: '695294629356',
     projectId: 'edcc-85230',
+    databaseURL: 'https://edcc-85230-default-rtdb.firebaseio.com',
     storageBucket: 'edcc-85230.appspot.com',
   );
 
@@ -78,6 +70,7 @@ class DefaultFirebaseOptions {
     appId: '1:695294629356:ios:f25a4082cada5a16909cc9',
     messagingSenderId: '695294629356',
     projectId: 'edcc-85230',
+    databaseURL: 'https://edcc-85230-default-rtdb.firebaseio.com',
     storageBucket: 'edcc-85230.appspot.com',
     iosBundleId: 'com.example.edcc',
   );
@@ -97,4 +90,26 @@ class DefaultFirebaseOptions {
 
     });
   }
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCI1zpo6_IcyZ_lb9yk4vS8-DUOT7TdTIg',
+    appId: '1:695294629356:ios:f25a4082cada5a16909cc9',
+    messagingSenderId: '695294629356',
+    projectId: 'edcc-85230',
+    databaseURL: 'https://edcc-85230-default-rtdb.firebaseio.com',
+    storageBucket: 'edcc-85230.appspot.com',
+    iosBundleId: 'com.example.edcc',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyBR2HVaXGLA2IMGxqyBKYahBwmYPXe_EYI',
+    appId: '1:695294629356:web:586748fcecce4dc3909cc9',
+    messagingSenderId: '695294629356',
+    projectId: 'edcc-85230',
+    authDomain: 'edcc-85230.firebaseapp.com',
+    databaseURL: 'https://edcc-85230-default-rtdb.firebaseio.com',
+    storageBucket: 'edcc-85230.appspot.com',
+    measurementId: 'G-Y7N4CV9CDL',
+  );
+
 }
