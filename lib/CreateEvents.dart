@@ -24,12 +24,12 @@ class CreateEvents extends StatelessWidget {
 
       // Add the event to Firestore
       await FirebaseFirestore.instance.collection('Events').add({
-        'Name': eventName.text.isNotEmpty ? eventName.text : 'Unknown Event',
+        'name': eventName.text.isNotEmpty ? eventName.text : 'Unknown Event',
         'description': eventDescribe.text.isNotEmpty ? eventDescribe.text : 'No description available',
-        'Time': Timestamp.fromDate(eventDateTime),
-        'Location': eventLocation.text.isNotEmpty ? eventLocation.text : 'Sheridan',
-        'Address': eventAddress.text.isNotEmpty ? eventAddress.text : 'No address available',
-        'geoPoint': const GeoPoint(0.0, 0.0), // Default geopoint value [0° N, 0° E]
+        'time': Timestamp.fromDate(eventDateTime),
+        'location': eventLocation.text.isNotEmpty ? eventLocation.text : 'Sheridan',
+        'address': eventAddress.text.isNotEmpty ? eventAddress.text : 'No address available',
+        'geopoint': const GeoPoint(0.0, 0.0), // Default geopoint value [0° N, 0° E]
       });
 
       // Show success message

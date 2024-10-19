@@ -23,22 +23,22 @@ class _EditEventScreenState extends State<EditEventScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.event['Name']);
-    _locationController = TextEditingController(text: widget.event['Location']);
-    _addressController = TextEditingController(text: widget.event['Address']);
-    _timeController = TextEditingController(text: widget.event['Time'].toDate().toString());
-    _geopointController = TextEditingController(text: '${widget.event['Geopoint']?.latitude ?? 0.0}, ${widget.event['Geopoint']?.longitude ?? 0.0}');
+    _nameController = TextEditingController(text: widget.event['name']);
+    _locationController = TextEditingController(text: widget.event['location']);
+    _addressController = TextEditingController(text: widget.event['address']);
+    _timeController = TextEditingController(text: widget.event['time'].toDate().toString());
+    _geopointController = TextEditingController(text: '${widget.event['geopoint']?.latitude ?? 0.0}, ${widget.event['geopoint']?.longitude ?? 0.0}');
   }
 
   // Function to update event in Firestore
   Future<void> _updateEvent() async {
     if (_formKey.currentState!.validate()) {
       await FirebaseFirestore.instance.collection('Events').doc(widget.eventId).update({
-        'Name': _nameController.text,
-        'Location': _locationController.text,
-        'Address': _addressController.text,
-        'Time': Timestamp.fromDate(DateTime.parse(_timeController.text)),
-        'Geopoint': GeoPoint(
+        'name': _nameController.text,
+        'location': _locationController.text,
+        'address': _addressController.text,
+        'time': Timestamp.fromDate(DateTime.parse(_timeController.text)),
+        'geopoint': GeoPoint(
           double.parse(_geopointController.text.split(', ')[0]),
           double.parse(_geopointController.text.split(', ')[1]),
         ),

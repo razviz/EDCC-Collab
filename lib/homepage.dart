@@ -87,8 +87,8 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                     side: BorderSide(color: Colors.black, width: 2),
                   ),
-                  title: Text(data['Name'] ?? 'Unknown Event'),
-                  subtitle: Text(data['Time']?.toDate().toString() ?? 'No Date Available'),
+                  title: Text(data['name'] ?? 'Unknown Event'),
+                  subtitle: Text(data['time']?.toDate().toString() ?? 'No Date Available'),
                   trailing: const Text("View Details"),
                   onTap: () {
                     // Navigate to EventDetailsScreen with the selected event's data and ID
