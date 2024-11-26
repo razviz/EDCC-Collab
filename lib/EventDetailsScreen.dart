@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'OpenMap.dart'; // Assuming OpenMap is already implemented
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'EditEventScreen.dart'; // Assuming EditEventScreen is implemented
 
 class EventDetailsScreen extends StatelessWidget {
@@ -27,6 +27,11 @@ class EventDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Assuming the event contains latitude and longitude for the location
+    final double latitude = event['latitude'] ?? 37.42796133580664; // Default to some lat/lng
+    final double longitude = event['longitude'] ?? -122.085749655962;
+    final LatLng eventLocation = LatLng(latitude, longitude);
+
     return Scaffold(
       backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
@@ -41,7 +46,7 @@ class EventDetailsScreen extends StatelessWidget {
               padding: const EdgeInsets.only(left: 15.0, top: 25.0),
               child: Center(
                 child: Text(
-                  event['Name'] ?? 'Event Title',
+                  event['name'] ?? 'Event Title',
                   style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -62,7 +67,7 @@ class EventDetailsScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
               child: Center(
                 child: Text(
-                  event['Time']?.toDate().toString() ?? 'Date not available',
+                  event['time']?.toDate().toString() ?? 'Date not available',
                   style: const TextStyle(fontSize: 25),
                 ),
               ),
@@ -72,32 +77,32 @@ class EventDetailsScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 15.0, bottom: 25.0),
               child: Center(
                 child: Text(
-                  event['Location'] ?? 'Location not available',
+                  event['location'] ?? 'Location not available',
                   style: const TextStyle(fontSize: 25),
                 ),
               ),
             ),
-            // Button to open map
+
+            // Embedded Map
             Container(
-              height: 50,
-              width: 300,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => OpenMap()), // Assuming OpenMap is implemented
-                  );
-                },
-                child: const Text(
-                  'View Location on Map',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+              height: 300,
+              child: GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: eventLocation,
+                  zoom: 14.0,
                 ),
+                markers: {
+                  Marker(
+                    markerId: MarkerId('eventLocation'),
+                    position: eventLocation,
+                    infoWindow: InfoWindow(
+                      title: event['name'] ?? 'Event Location',
+                    ),
+                  ),
+                },
               ),
             ),
+
             const SizedBox(height: 20), // Spacer for better layout
 
             // Button to edit the event

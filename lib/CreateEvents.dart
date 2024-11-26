@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'homepage.dart';
 
-class CreateEvents extends StatelessWidget {
-  CreateEvents({super.key});
+class CreateEvents extends StatefulWidget {
+  @override
+  _CreateEventsState createState() => _CreateEventsState();
+}
 
+class _CreateEventsState extends State<CreateEvents> {
   // Variables for input fields
   TextEditingController eventName = TextEditingController();
   TextEditingController eventDescribe = TextEditingController();
@@ -12,6 +15,49 @@ class CreateEvents extends StatelessWidget {
   TextEditingController eventTime = TextEditingController();
   TextEditingController eventLocation = TextEditingController();
   TextEditingController eventAddress = TextEditingController();
+  TextEditingController newTagController = TextEditingController();
+
+  // Tags handling
+  List<String> availableTags = [];
+  List<String> selectedTags = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTags(); // Fetch tags from Firestore
+  }
+
+  Future<void> _loadTags() async {
+    final tagsDoc = await FirebaseFirestore.instance.collection('AppData').doc('Tags').get();
+    if (tagsDoc.exists && tagsDoc.data() != null) {
+      final data = tagsDoc.data()!;
+      if (data.containsKey('tags') && data['tags'] is List) {
+        setState(() {
+          availableTags = List<String>.from(data['tags']);
+        });
+      }
+    }
+  }
+
+  Future<void> _addNewTag() async {
+    final newTag = newTagController.text.trim();
+    if (newTag.isNotEmpty && !availableTags.contains(newTag)) {
+      setState(() {
+        availableTags.add(newTag); // Add locally
+        selectedTags.add(newTag); // Select the new tag by default
+        newTagController.clear(); // Clear input field
+      });
+
+      // Save to Firestore
+      await FirebaseFirestore.instance.collection('AppData').doc('Tags').set({
+        'tags': availableTags,
+      }, SetOptions(merge: true));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(newTag.isEmpty ? 'Tag cannot be empty!' : 'Tag already exists!'),
+      ));
+    }
+  }
 
   // Function to create a new event in Firestore
   Future<void> _createEvent(BuildContext context) async {
@@ -24,12 +70,13 @@ class CreateEvents extends StatelessWidget {
 
       // Add the event to Firestore
       await FirebaseFirestore.instance.collection('Events').add({
-        'Name': eventName.text.isNotEmpty ? eventName.text : 'Unknown Event',
+        'name': eventName.text.isNotEmpty ? eventName.text : 'Unknown Event',
         'description': eventDescribe.text.isNotEmpty ? eventDescribe.text : 'No description available',
-        'Time': Timestamp.fromDate(eventDateTime),
-        'Location': eventLocation.text.isNotEmpty ? eventLocation.text : 'Sheridan',
-        'Address': eventAddress.text.isNotEmpty ? eventAddress.text : 'No address available',
-        'geoPoint': const GeoPoint(0.0, 0.0), // Default geopoint value [0° N, 0° E]
+        'time': Timestamp.fromDate(eventDateTime),
+        'location': eventLocation.text.isNotEmpty ? eventLocation.text : 'Sheridan',
+        'address': eventAddress.text.isNotEmpty ? eventAddress.text : 'No address available',
+        'geopoint': const GeoPoint(0.0, 0.0), // Default geopoint value [0° N, 0° E]
+        'tags': selectedTags, // Add selected tags
       });
 
       // Show success message
@@ -141,13 +188,54 @@ class CreateEvents extends StatelessWidget {
                     hintText: 'Enter the address, e.g., 123 Main St'),
               ),
             ),
+            const Padding(
+              padding: EdgeInsets.only(top: 25),
+              child: Text('Select Tags:',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+            ),
+            ...availableTags.map((tag) {
+              return CheckboxListTile(
+                title: Text(tag),
+                value: selectedTags.contains(tag),
+                onChanged: (bool? value) {
+                  setState(() {
+                    if (value == true) {
+                      selectedTags.add(tag);
+                    } else {
+                      selectedTags.remove(tag);
+                    }
+                  });
+                },
+              );
+            }).toList(),
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                    child: TextField(
+                      controller: newTagController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Add New Tag:',
+                          hintText: 'Enter a new tag'),
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: _addNewTag,
+                  child: const Text('Add'),
+                ),
+              ],
+            ),
             Container(
               height: 50,
               width: 250,
               decoration: BoxDecoration(
                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
               child: TextButton(
-                onPressed: () => _createEvent(context), // Call the create event function
+                onPressed: () => _createEvent(context),
                 child: const Text(
                   'Create New Event',
                   style: TextStyle(color: Colors.white, fontSize: 25),
