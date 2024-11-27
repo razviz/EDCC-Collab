@@ -77,6 +77,7 @@ class _CreateEventsState extends State<CreateEvents> {
         'address': eventAddress.text.isNotEmpty ? eventAddress.text : 'No address available',
         'geopoint': const GeoPoint(0.0, 0.0), // Default geopoint value [0° N, 0° E]
         'tags': selectedTags, // Add selected tags
+        'viewCount': 0, //initializes the number of views to 0.
       });
 
       // Show success message
