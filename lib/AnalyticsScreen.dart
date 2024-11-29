@@ -20,9 +20,15 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   int totalLikes = 0;
   int userEventDetailViews = 0;
 
-  // Function to calculate event attendance and related analytics
+  int positiveReviews = 0;
+  int neutralReviews = 0;
+  int negativeReviews = 0;
+  bool isLoadingReviews = true;
+  bool hasReviews = true;
+
   bool isLoading = true; // Add a loading flag
 
+  // Function to calculate event attendance and related analytics
   Future<void> calculateEventAttendance() async {
     try {
       print("Starting calculateEventAttendance...");
@@ -94,7 +100,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   }
 
 
-
   // Fetch and calculate "viewCount" and "likes" for the current event
   Future<void> calculateUserEventDetailViewsAndLikes() async {
     try {
@@ -128,17 +133,75 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   }
 
 
+  /// Fetch and calculate sentiment percentages for reviews
+  Future<void> calculateSentimentAnalysis() async {
+    try {
+      CollectionReference reviewsRef = FirebaseFirestore.instance
+          .collection('Events')
+          .doc(widget.currentEventId)
+          .collection('Reviews');
+
+      QuerySnapshot reviewsSnapshot = await reviewsRef.get();
+
+      if (reviewsSnapshot.docs.isEmpty) {
+        setState(() {
+          hasReviews = false;
+          isLoadingReviews = false;
+        });
+        return;
+      }
+
+      int positive = 0, neutral = 0, negative = 0;
+
+      for (var reviewDoc in reviewsSnapshot.docs) {
+        Map<String, dynamic>? reviewData = reviewDoc.data() as Map<String, dynamic>?;
+
+        if (reviewData != null && reviewData.containsKey('sentimentScore')) {
+          double sentimentScore = reviewData['sentimentScore'] ?? 0.0;
+
+          if (sentimentScore >= 0.25 && sentimentScore <= 1.0) {
+            positive++;
+          } else if (sentimentScore > -0.25 && sentimentScore < 0.25) {
+            neutral++;
+          } else if (sentimentScore >= -1.0 && sentimentScore < -0.25) {
+            negative++;
+          }
+        }
+      }
+
+      setState(() {
+        positiveReviews = positive;
+        neutralReviews = neutral;
+        negativeReviews = negative;
+        isLoadingReviews = false;
+        hasReviews = positive + neutral + negative > 0;
+      });
+    } catch (e) {
+      print('Error calculating sentiment analysis: $e');
+      setState(() {
+        isLoadingReviews = false;
+        hasReviews = false;
+      });
+    }
+  }
 
 
   @override
   void initState() {
     super.initState();
     calculateEventAttendance(); // Calculate attendance for the selected event
-    calculateUserEventDetailViewsAndLikes(); // Calculate total event detail views
+    calculateUserEventDetailViewsAndLikes(); // Calculate total number of views for the selected event
+    calculateSentimentAnalysis(); //Calculate sentiment analysis of reviews for selected event
   }
 
   @override
   Widget build(BuildContext context) {
+    // Calculate percentages for reviews (sentiment analysis)
+    int totalReviews = positiveReviews + neutralReviews + negativeReviews;
+    double positivePercentage = totalReviews > 0 ? (positiveReviews / totalReviews) * 100 : 0;
+    double neutralPercentage = totalReviews > 0 ? (neutralReviews / totalReviews) * 100 : 0;
+    double negativePercentage = totalReviews > 0 ? (negativeReviews / totalReviews) * 100 : 0;
+
     return Scaffold(
       backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
@@ -230,6 +293,81 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             Text(
               'Number of users who viewed event details: $userEventDetailViews',
               style: const TextStyle(fontSize: 18, color: Colors.black),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Sentiment Analysis',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+            ),
+            const SizedBox(height: 10),
+
+
+            // Check if reviews exist and sentiment scores are available
+            isLoadingReviews
+                ? const Center(child: CircularProgressIndicator())
+                : hasReviews
+                ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Positive reviews: ${positivePercentage.toStringAsFixed(1)}%',
+                  style: const TextStyle(fontSize: 18, color: Colors.black),
+                ),
+                Text(
+                  'Neutral reviews: ${neutralPercentage.toStringAsFixed(1)}%',
+                  style: const TextStyle(fontSize: 18, color: Colors.black),
+                ),
+                Text(
+                  'Negative reviews: ${negativePercentage.toStringAsFixed(1)}%',
+                  style: const TextStyle(fontSize: 18, color: Colors.black),
+                ),
+                const SizedBox(height: 20),
+              ],
+            )
+                : const Center(
+              child: Text(
+                "There are currently no reviews yet",
+                style: TextStyle(fontSize: 18, color: Colors.black),
+              ),
+            ),
+
+            // Pie Chart for sentiment analysis
+            isLoadingReviews
+                ? const Center(child: CircularProgressIndicator())
+                : hasReviews
+                ? SizedBox(
+              height: 250,
+              child: PieChart(
+                PieChartData(
+                  sections: [
+                    PieChartSectionData(
+                      value: positiveReviews.toDouble(),
+                      color: Colors.green,
+                      title: 'Positive',
+                      radius: 50,
+                    ),
+                    PieChartSectionData(
+                      value: neutralReviews.toDouble(),
+                      color: Colors.yellow,
+                      title: 'Neutral',
+                      radius: 50,
+                    ),
+                    PieChartSectionData(
+                      value: negativeReviews.toDouble(),
+                      color: Colors.red,
+                      title: 'Negative',
+                      radius: 50,
+                    ),
+                  ],
+                  sectionsSpace: 2,
+                ),
+              ),
+            )
+                : const Center(
+              child: Text(
+                "",
+                style: TextStyle(fontSize: 18, color: Colors.black),
+              ),
             ),
           ],
         ),
